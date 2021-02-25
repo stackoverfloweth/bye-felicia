@@ -24,12 +24,17 @@ const actions = {
     },
     newGame({ commit }) {
         commit('clearPlayers')
-        commit('setRound', 1)
+        commit('setRound', 0)
     },
     nextRound({ state, dispatch, commit }){
         dispatch('shufflePlayers')
         commit('setRound', ++state.round)
-    }
+    },
+    buildPhaseComplete({ state, commit }){
+        if (state.round == 0 && state.players.length > 1){
+            commit('setRound', 1)
+        }
+    },
 }
 
 export default actions

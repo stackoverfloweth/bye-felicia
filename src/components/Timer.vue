@@ -2,9 +2,9 @@
     <div :class="classes.container" class="rounded p-3">
         <h1 :class="classes.timer">{{seconds}}:{{milliseconds}}</h1>
         <div>
-            <b-button v-if="!running" size="sm" variant="light" class="mr-1" @click="start">Start</b-button>
             <b-button v-if="running" size="sm" variant="light" class="mr-1" @click="stop">Stop</b-button>
-            <b-button size="sm" variant="light" class="mr-1" @click="reset">Reset</b-button>
+            <b-button v-else :disabled="remaining == 0" size="sm" variant="light" class="mr-1" @click="start">Start</b-button>
+            <b-button :disabled="remaining == starting" size="sm" variant="light" class="mr-1" @click="reset">Reset</b-button>
         </div>
     </div>
 </template>
@@ -15,7 +15,7 @@ import { Component } from 'vue-property-decorator'
 
 @Component
 export default class Timer extends Vue {
-    starting = 4500
+    starting = 500
     remaining = 0
     running = false
 
@@ -61,6 +61,7 @@ export default class Timer extends Vue {
         this.running = true
         this.timer = setInterval(() => {
             if (this.remaining == 0){
+                this.$store.dispatch('buildPhaseComplete')
                 return this.stop()
             }
 

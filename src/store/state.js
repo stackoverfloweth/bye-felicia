@@ -1,7 +1,7 @@
 const state = {
     pool: [],
     players: [],
-    round: 1,
+    round: 0,
 }
 
 export default state

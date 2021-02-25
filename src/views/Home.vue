@@ -2,8 +2,9 @@
     <b-container>
         <b-row>
             <b-col md="6" class="pb-3">
-                <h3>Round {{round}}</h3>
-                <timer />
+                <h3 v-if="round == 0">Build Phase</h3>
+                <h3 v-else>Round {{round}}</h3>
+                <timer ref="timer" />
             </b-col>
             <b-col md="6">
                 <add-player />
@@ -14,7 +15,11 @@
                     <player v-for="(player, index) in players" :key="index" :player="player" />
                 </div>
                 <div class="d-flex justify-content-center">
-                    <b-button variant="light" :disabled="players.length == 0" @click="nextRound">Next Round</b-button>
+                    <b-button v-if="round > 0" variant="light" :disabled="round == 0" @click="nextRound">Next Round</b-button>
+                    <span v-if="round == 0" id="start-button">
+                        <b-button :disabled="players.length < 2" variant="light" class="mr-1" @click="start">Begin</b-button>
+                        <b-popover v-if="players.length < 2" target="start-button" content="Not enough players!" triggers="hover" placement="bottom" />
+                    </span>
                     <b-button variant="light" class="ml-1" @click="reset">New Game</b-button>
                 </div>
             </b-col>
@@ -57,6 +62,10 @@ export default class Home extends Vue {
 
     get round(){
         return this.$store.state.round
+    }
+
+    start(){
+        this.$refs.timer.start()
     }
 
     nextRound(){
