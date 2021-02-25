@@ -15,7 +15,7 @@ import { Component } from 'vue-property-decorator'
 
 @Component
 export default class Timer extends Vue {
-    starting = 500
+    starting = 4500
     remaining = 0
     running = false
 
