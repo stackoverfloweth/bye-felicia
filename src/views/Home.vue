@@ -12,7 +12,12 @@
                     <div v-if="players.length == 0" class="text-center">
                         <em>No Players</em>
                     </div>
-                    <player v-for="(player, index) in players" :key="index" :player="player" />
+                    <template v-if="round > 0">
+                        <player v-for="(player, index) in players" :key="index" :player="player" />
+                    </template>
+                    <template v-else>
+                        <player v-for="(player, index) in pool" :key="index" :player="{name: player}" />
+                    </template>
                 </div>
                 <div class="d-flex justify-content-center">
                     <b-button v-if="round > 0" variant="light" :disabled="round == 0" @click="nextRound">Next Round</b-button>
@@ -58,6 +63,10 @@ export default class Home extends Vue {
 
     get players(){
         return this.$store.state.players
+    }
+
+    get pool(){
+        return this.$store.state.pool
     }
 
     get round(){

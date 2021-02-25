@@ -5,13 +5,11 @@ import store from './store'
 
 import './styles/main.scss'
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
-import VueBootstrapTypeahead from 'vue-bootstrap-typeahead'
 
 Vue.config.productionTip = false
 
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
-Vue.component('vue-bootstrap-typeahead', VueBootstrapTypeahead)
 
 new Vue({
   router,
