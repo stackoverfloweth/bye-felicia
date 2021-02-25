@@ -20,8 +20,15 @@ const mutations = {
     addToPool: (state, name) => {
         state.pool.push(name)
     },
+    removeFromPool: (state, name) => {
+        const index = state.pool.indexOf(name)
+        state.pool.splice(index, 1)
+    },
     setRound: (state, round) => {
         state.round = round
+    },
+    setCurrentPlayerIndex: (state, currentPlayerIndex) => {
+        state.currentPlayerIndex = currentPlayerIndex
     },
 }
 

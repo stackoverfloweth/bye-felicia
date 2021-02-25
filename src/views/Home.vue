@@ -3,14 +3,26 @@
         <b-row>
             <b-col md="6" class="pb-3">
                 <h3 v-if="round == 0">Build Phase</h3>
-                <h3 v-else>Round {{round}}</h3>
+                <h3 v-else class="d-flex align-items-start">
+                    Round {{round}}
+                </h3>
                 <timer ref="timer" />
             </b-col>
             <b-col md="6">
                 <add-player />
                 <div class="py-3">
-                    <div v-if="players.length == 0" class="text-center">
-                        <em>No Players</em>
+                    <b-overlay :show="confirm" variant="transparent" no-wrap>
+                        <div class="text-center" slot="overlay">
+                            <p><strong>Are you sure?</strong></p>
+                            <div class="d-flex">
+                                <b-button variant="light" class="mr-1" @click="confirm = false">Cancel</b-button>
+                                <b-button variant="danger" @click="reset">Reset</b-button>
+                            </div>
+                        </div>
+                    </b-overlay>
+                    <div class="text-center">
+                        <em v-if="players.length == 0">No Players</em>
+                        <em v-else>{{$store.getters.activePlayers.length}} Players</em>
                     </div>
                     <template v-if="round > 0">
                         <player v-for="(player, index) in players" :key="index" :player="player" />
@@ -20,12 +32,13 @@
                     </template>
                 </div>
                 <div class="d-flex justify-content-center">
-                    <b-button v-if="round > 0" variant="light" :disabled="round == 0" @click="nextRound">Next Round</b-button>
+                    <b-button v-if="round > 0" variant="light" :disabled="round == 0" @click="next">👍</b-button>
+                    <b-button v-if="round > 0" variant="light" class="ml-1" :disabled="round == 0" @click="out">👎</b-button>
                     <span v-if="round == 0" id="start-button">
                         <b-button :disabled="players.length < 2" variant="light" class="mr-1" @click="start">Begin</b-button>
                         <b-popover v-if="players.length < 2" target="start-button" content="Not enough players!" triggers="hover" placement="bottom" />
                     </span>
-                    <b-button variant="light" class="ml-1" @click="reset">New Game</b-button>
+                    <b-button variant="light" class="ml-1" @click="confirm = true">New Game</b-button>
                 </div>
             </b-col>
         </b-row>
@@ -51,6 +64,8 @@ import WinnerModal from '@/components/WinnerModal.vue'
 })
 export default class Home extends Vue {
 
+    confirm = false
+
     get winner(){
         if (this.players.length < 2){
             return null
@@ -66,22 +81,32 @@ export default class Home extends Vue {
     }
 
     get pool(){
-        return this.$store.state.pool
+        return this.$store.state.pool.sort()
     }
 
     get round(){
         return this.$store.state.round
     }
 
+    get currentPlayer(){
+        return this.players[this.$store.state.currentPlayerIndex]
+    }
+
     start(){
         this.$refs.timer.start()
     }
 
-    nextRound(){
-        this.$store.dispatch('nextRound')
+    next(){
+        this.$store.dispatch('nextPlayer')
+    }
+
+    out(){
+        this.$store.commit('setPlayerOut', { ...this.currentPlayer, out: true })
+        this.next()
     }
 
     reset(){
+        this.confirm = false
         this.$store.dispatch('newGame')
     }
 

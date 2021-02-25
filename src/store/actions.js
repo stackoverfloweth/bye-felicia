@@ -8,8 +8,8 @@ const actions = {
             commit('addPlayer', name)
         }
     },
-    shufflePlayers({ state, commit }){
-        const array = [...state.players]
+    shufflePlayers({ state, commit }) {
+        const array = [...state.players.filter(x => !x.out)]
         let currentIndex = array.length, temporaryValue, randomIndex
 
         while (0 !== currentIndex) {
@@ -20,20 +20,32 @@ const actions = {
             array[randomIndex] = temporaryValue
         }
 
-        commit('setPlayers', array)
+        commit('setPlayers', [...state.players.filter(x => x.out), ...array])
     },
     newGame({ commit }) {
         commit('clearPlayers')
         commit('setRound', 0)
+        commit('setCurrentPlayerIndex', -1)
     },
-    nextRound({ state, dispatch, commit }){
-        dispatch('shufflePlayers')
-        commit('setRound', ++state.round)
-    },
-    buildPhaseComplete({ state, commit }){
-        if (state.round == 0 && state.players.length > 1){
-            commit('setRound', 1)
+    nextPlayer({ state, dispatch, commit }) {
+        if (state.players.length - 1 > state.currentPlayerIndex) {
+            commit('setCurrentPlayerIndex', state.currentPlayerIndex + 1)
+        } else {
+            dispatch('nextRound')
         }
+    },
+    nextRound({ state, getters, dispatch, commit }) {
+        dispatch('shufflePlayers')
+        commit('setRound', state.round + 1)
+        commit('setCurrentPlayerIndex', getters.outPlayers.length)
+    },
+    startGame({ state, dispatch }) {
+        if (state.round == 0 && state.players.length > 1) {
+            dispatch('nextRound')
+        }
+    },
+    endGame({ commit }) {
+        commit('setCurrentPlayerIndex', -1)
     },
 }
 

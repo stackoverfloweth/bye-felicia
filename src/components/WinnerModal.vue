@@ -40,6 +40,7 @@ export default class WinnerModal extends Vue {
     }
 
     shown() {
+        this.$store.dispatch('endGame')
         this.$confetti.start({ particles: [
             { type: 'rect', }
         ], })

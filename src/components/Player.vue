@@ -1,11 +1,14 @@
 <template>
-    <div class="d-flex align-items-center">
+    <div class="d-flex mb-1 align-items-center">
         <b-form-checkbox v-if="round > 0" v-model="out" />
         <span :style="styles.name">
             {{player.name}}
         </span>
-        <b-button v-if="playing" class="ml-auto xs-button" variant="danger" @click="remove">&times;</b-button>
-        <b-button v-else class="ml-auto xs-button" variant="success" @click="add">&plus;</b-button>
+        <b-badge v-if="current" class="ml-1">Current</b-badge>
+        <div class="ml-auto" v-if="round == 0">
+            <b-button :pressed="playing" size="sm" class="ml-1" variant="light" @click="toggle">Playing</b-button>
+            <b-button size="sm" class="ml-1" variant="danger" @click="deleteFromPool">Delete</b-button>
+        </div>
     </div>
 </template>
 
@@ -21,8 +24,16 @@ export default class Player extends Vue {
         return this.$store.state.round
     }
 
+    get playerIndex(){
+        return this.$store.state.players.findIndex(x => x.name == this.player.name)
+    }
+
     get playing(){
-        return this.$store.state.players.findIndex(x => x.name == this.player.name) > -1
+        return this.playerIndex > -1
+    }
+
+    get current(){
+        return this.playing && this.$store.state.currentPlayerIndex == this.playerIndex
     }
 
     get out(){
@@ -36,28 +47,22 @@ export default class Player extends Vue {
     get styles(){
         return {
             name: {
-                textDecoration: this.out ? 'line-through' : 'none'
+                textDecoration: this.out ? 'line-through' : 'none',
+                color: this.playing ? 'black' : 'lightgray'
             }
         }
     }
 
-    add(){
-        this.$store.commit('addPlayer', this.player.name)
+    toggle(){
+        if (this.playing){
+            this.$store.commit('removePlayer', this.player.name)
+        } else {
+            this.$store.commit('addPlayer', this.player.name)
+        }
     }
 
-    remove(){
-        this.$store.commit('removePlayer', this.player.name)
+    deleteFromPool(){
+        this.$store.commit('removeFromPool', this.player.name)
     }
 }
 </script>
-<style lang="scss">
-    #app {
-        .xs-button {
-            font-size: 18px;
-            line-height: 0;
-            height: 16px;
-            width: 16px;
-            padding: 0;
-        }
-    }
-</style>

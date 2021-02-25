@@ -61,7 +61,7 @@ export default class Timer extends Vue {
         this.running = true
         this.timer = setInterval(() => {
             if (this.remaining == 0){
-                this.$store.dispatch('buildPhaseComplete')
+                this.$store.dispatch('startGame')
                 return this.stop()
             }
 

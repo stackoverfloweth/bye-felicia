@@ -2,7 +2,7 @@
     <b-form @submit.prevent="submit">
         <div class="d-flex">
             <div class="flex-grow-1 mr-1">
-                <b-input v-model="name" placeholder="Add a player" />
+                <b-input v-model="name" placeholder="Add a player" autocomplete="off" />
             </div>
             <b-button v-show="false" type="submit">Submit</b-button>
         </div>
