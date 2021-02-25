@@ -1,10 +1,10 @@
 const actions = {
     addPlayer({ state, commit }, name) {
-        if (!state.pool.find(x => x.name == name)) {
+        if (!state.pool.includes(name)) {
             commit('addToPool', name)
         }
 
-        if (!state.players.find(x => x.name == name)) {
+        if (state.players.findIndex(x => x.name == name) == -1) {
             commit('addPlayer', name)
         }
     },
@@ -24,7 +24,12 @@ const actions = {
     },
     newGame({ commit }) {
         commit('clearPlayers')
+        commit('setRound', 1)
     },
+    nextRound({ state, dispatch, commit }){
+        dispatch('shufflePlayers')
+        commit('setRound', ++state.round)
+    }
 }
 
 export default actions

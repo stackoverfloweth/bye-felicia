@@ -20,6 +20,9 @@ const mutations = {
     addToPool: (state, name) => {
         state.pool.push(name)
     },
+    setRound: (state, round) => {
+        state.round = round
+    },
 }
 
 export default mutations

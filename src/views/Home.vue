@@ -2,6 +2,7 @@
     <b-container>
         <b-row>
             <b-col md="6" class="pb-3">
+                <h3>Round {{round}}</h3>
                 <timer />
             </b-col>
             <b-col md="6">
@@ -13,7 +14,7 @@
                     <player v-for="(player, index) in players" :key="index" :player="player" />
                 </div>
                 <div class="d-flex justify-content-center">
-                    <b-button variant="light" :disabled="players.length == 0" @click="shuffle">Shuffle</b-button>
+                    <b-button variant="light" :disabled="players.length == 0" @click="nextRound">Next Round</b-button>
                     <b-button variant="light" class="ml-1" @click="reset">New Game</b-button>
                 </div>
             </b-col>
@@ -54,8 +55,12 @@ export default class Home extends Vue {
         return this.$store.state.players
     }
 
-    shuffle(){
-        this.$store.dispatch('shufflePlayers')
+    get round(){
+        return this.$store.state.round
+    }
+
+    nextRound(){
+        this.$store.dispatch('nextRound')
     }
 
     reset(){
