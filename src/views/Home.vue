@@ -10,7 +10,7 @@
                     <div v-if="players.length == 0" class="text-center">
                         <em>No Players</em>
                     </div>
-                    <player v-for="(player, index) in shuffledPlayers" :key="index" :player="player" />
+                    <player v-for="(player, index) in players" :key="index" :player="player" />
                 </div>
                 <div class="d-flex justify-content-center">
                     <b-button variant="light" :disabled="players.length == 0" @click="shuffle">Shuffle</b-button>
@@ -18,7 +18,7 @@
                 </div>
             </b-col>
         </b-row>
-        <winner-modal :visible="Boolean(winner)" :player="winner" />
+        <winner-modal v-if="Boolean(winner)" :visible="true" :player="winner" />
     </b-container>
 </template>
 
@@ -40,8 +40,6 @@ import WinnerModal from '@/components/WinnerModal.vue'
 })
 export default class Home extends Vue {
 
-    lastFetch = null
-
     get winner(){
         if (this.players.length < 2){
             return null
@@ -56,26 +54,8 @@ export default class Home extends Vue {
         return this.$store.state.players
     }
 
-    get shuffledPlayers() {
-        if (this.lastFetch){
-            this.lastFetch = Date.now()
-        }
-        const array = [...this.players]
-        let currentIndex = array.length, temporaryValue, randomIndex
-
-        while (0 !== currentIndex) {
-            randomIndex = Math.floor(Math.random() * currentIndex)
-            currentIndex -= 1
-            temporaryValue = array[currentIndex]
-            array[currentIndex] = array[randomIndex]
-            array[randomIndex] = temporaryValue
-        }
-
-        return array
-    }
-
     shuffle(){
-        this.lastFetch = Date.now
+        this.$store.dispatch('shufflePlayers')
     }
 
     reset(){

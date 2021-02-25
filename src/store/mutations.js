@@ -10,6 +10,9 @@ const mutations = {
         const index = state.players.findIndex(x => x.name == name)
         state.players.splice(index, 1)
     },
+    setPlayers: (state, players) => {
+        state.players = players
+    },
     setPlayerOut: (state, { name, out }) => {
         const index = state.players.findIndex(x => x.name == name)
         state.players.splice(index, 1, { name, out })
