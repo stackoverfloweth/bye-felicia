@@ -8,7 +8,7 @@ const getters = {
     potentialPlayers: (state) => {
         return state.pool
             .filter(player => !state.players.includes(player))
-            .sort((a, b) => (a.name > b.name) ? 1 : -1)
+            .sort((player1, player2) => (player1.name > player2.name) ? 1 : -1)
     },
 }
 

@@ -35,10 +35,10 @@
                     <b-button v-if="round > 0" variant="light" :disabled="round == 0" @click="next">👍</b-button>
                     <b-button v-if="round > 0" variant="light" class="ml-1" :disabled="round == 0" @click="out">👎</b-button>
                     <span v-if="round == 0" id="start-button">
-                        <b-button :disabled="players.length < 2" variant="light" class="mr-1" @click="start">Begin</b-button>
+                        <b-button :disabled="players.length < 2" variant="success" class="mr-1" @click="start">Begin</b-button>
                         <b-popover v-if="players.length < 2" target="start-button" content="Not enough players!" triggers="hover" placement="bottom" />
                     </span>
-                    <b-button variant="light" class="ml-1" @click="confirm = true">New Game</b-button>
+                    <b-button variant="primary" class="ml-1" @click="confirm = true">New Game</b-button>
                 </div>
             </b-col>
         </b-row>
