@@ -6,7 +6,9 @@ const getters = {
         return state.players.filter(player => player.out)
     },
     potentialPlayers: (state) => {
-        return state.pool.filter(player => !state.players.includes(player))
+        return state.pool
+            .filter(player => !state.players.includes(player))
+            .sort((a, b) => (a.name > b.name) ? 1 : -1)
     },
 }
 

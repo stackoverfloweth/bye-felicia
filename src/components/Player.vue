@@ -6,7 +6,7 @@
         </span>
         <b-badge v-if="current" class="ml-1">Current</b-badge>
         <div class="ml-auto" v-if="round == 0">
-            <b-button :pressed="playing" size="sm" class="ml-1" variant="light" @click="toggle">Playing</b-button>
+            <b-button :pressed="playing" size="sm" class="ml-1" variant="light" @click="toggle">{{ playingText }}</b-button>
             <b-button size="sm" class="ml-1" variant="danger" @click="deleteFromPool">Delete</b-button>
         </div>
     </div>
@@ -30,6 +30,10 @@ export default class Player extends Vue {
 
     get playing(){
         return this.playerIndex > -1
+    }
+
+    get playingText(){
+        return this.playing ? 'Quitting' : 'Playing'
     }
 
     get current(){
