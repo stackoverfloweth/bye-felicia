@@ -28,8 +28,10 @@ const actions = {
         commit('setCurrentPlayerIndex', -1)
     },
     nextPlayer({ state, dispatch, commit }) {
-        if (state.players.length - 1 > state.currentPlayerIndex) {
-            commit('setCurrentPlayerIndex', state.currentPlayerIndex + 1)
+        const nextPlayerIndex = state.players.findIndex((player, i) => i > state.currentPlayerIndex && !player.out)
+
+        if (nextPlayerIndex > -1) {
+            commit('setCurrentPlayerIndex', nextPlayerIndex)
         } else {
             dispatch('nextRound')
         }
